@@ -1,15 +1,21 @@
-#build stage
+# build stage
 FROM golang:alpine AS builder
 RUN apk add --no-cache git
-WORKDIR /go/src/app
+WORKDIR /app
+COPY go.mod ./
+COPY go.sum ./
+RUN go mod download
+RUN go mod verify
 COPY . .
-RUN go get -d -v ./...
-RUN go build -o /go/bin/app -v ./...
+RUN go build -o nodeGateway -v ./cmd
 
-#final stage
+
+# run stage
 FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-COPY --from=builder /go/bin/app /app
-ENTRYPOINT /app
-LABEL Name=sequencecodetest Version=0.0.1
+WORKDIR /app
+COPY --from=builder /app/nodeGateway .
+
+HEALTHCHECK  --interval=5m --timeout=3s \
+    CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
 EXPOSE 8080
+CMD /app/nodeGateway
