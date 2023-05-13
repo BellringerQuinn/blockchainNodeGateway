@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/BellringerQuinn/blockchainNodeGateway/handlers"
+	handlers "github.com/BellringerQuinn/blockchainNodeGateway/handler"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -24,7 +24,7 @@ func setupServer(handler handlers.Handler) {
 		w.WriteHeader(http.StatusOK)
 	})
 
-	r.Route("/eth", func(r chi.Router) {
+	r.Route("/{network}", func(r chi.Router) {
 		r.Get("/chainID", handler.GetChainID)
 		r.Get("/networkVersion", handler.GetNetworkVersion)
 	})
