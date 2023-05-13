@@ -25,6 +25,7 @@ func setupServer(handler handlers.Handler) {
 	})
 
 	r.Route("/{network}", func(r chi.Router) {
+		r.Use(handler.ValidateNetwork)
 		r.Get("/chainID", handler.GetChainID)
 		r.Get("/networkVersion", handler.GetNetworkVersion)
 	})
