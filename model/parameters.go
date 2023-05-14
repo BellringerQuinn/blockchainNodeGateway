@@ -15,6 +15,11 @@ const (
 )
 
 var NetworkMap = map[string]Network{
-	"eth":     Eth,
-	"polygon": Polygon,
+	EthParam:     Eth,
+	PolygonParam: Polygon,
 }
+
+const (
+	EthParam     = "eth"
+	PolygonParam = "polygon"
+)

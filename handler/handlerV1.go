@@ -39,20 +39,30 @@ func (h HandlerV1) GetChainID(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	network, ok := ctx.Value("network").(string)
 	if !ok {
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	w.Write([]byte("GetChainID: " + network))
+	response, err := h.fetcher.FetchResource(model.ChainID, model.NetworkMap[network])
+	if err != nil {
+		w.WriteHeader(http.StatusBadGateway)
+	}
+	w.Write([]byte(response))
 }
 
 func (h HandlerV1) GetNetworkVersion(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	network, ok := ctx.Value("network").(string)
 	if !ok {
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	w.Write([]byte("GetNetworkVersion: " + network))
+	response, err := h.fetcher.FetchResource(model.NetworkVersion, model.NetworkMap[network])
+	if err != nil {
+		w.WriteHeader(http.StatusBadGateway)
+	}
+	w.Write([]byte(response))
 }
 
 func ValidateNetwork(network string) error {
