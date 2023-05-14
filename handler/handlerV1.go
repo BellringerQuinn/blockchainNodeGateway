@@ -5,13 +5,19 @@ import (
 	"net/http"
 
 	"github.com/BellringerQuinn/blockchainNodeGateway/customerror"
+	"github.com/BellringerQuinn/blockchainNodeGateway/model"
+	"github.com/BellringerQuinn/blockchainNodeGateway/resourcefetcher"
 	"github.com/go-chi/chi/v5"
 )
 
-type HandlerV1 struct{}
+type HandlerV1 struct {
+	fetcher resourcefetcher.ResourceFetcher
+}
 
-func NewHandlerV1() Handler {
-	return HandlerV1{}
+func NewHandlerV1(fetcher resourcefetcher.ResourceFetcher) Handler {
+	return HandlerV1{
+		fetcher: fetcher,
+	}
 }
 
 func (h HandlerV1) ValidateNetwork(next http.Handler) http.Handler {
@@ -50,7 +56,7 @@ func (h HandlerV1) GetNetworkVersion(w http.ResponseWriter, r *http.Request) {
 }
 
 func ValidateNetwork(network string) error {
-	if network == "eth" || network == "polygon" {
+	if _, ok := model.NetworkMap[network]; ok {
 		return nil
 	} else {
 		return customerror.ErrInvalidNetworkParameter

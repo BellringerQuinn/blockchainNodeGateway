@@ -5,12 +5,16 @@ import (
 	"time"
 
 	handlers "github.com/BellringerQuinn/blockchainNodeGateway/handler"
+	"github.com/BellringerQuinn/blockchainNodeGateway/provider"
+	"github.com/BellringerQuinn/blockchainNodeGateway/resourcefetcher"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
 
 func main() {
-	setupServer(handlers.NewHandlerV1())
+	providerSelector := provider.NewProviderSelectorV1()
+	resourceFetcher := resourcefetcher.NewResourceFetcherV1(providerSelector)
+	setupServer(handlers.NewHandlerV1(resourceFetcher))
 }
 
 func setupServer(handler handlers.Handler) {
