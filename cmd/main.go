@@ -13,14 +13,17 @@ import (
 
 func main() {
 	providerSelector := provider.NewProviderSelectorV1()
-	resourceFetcher := resourcefetcher.NewResourceFetcherV1(providerSelector)
+	client := &http.Client{
+		Timeout: time.Second * 3,
+	}
+	resourceFetcher := resourcefetcher.NewResourceFetcherV1(providerSelector, client)
 	setupServer(handlers.NewHandlerV1(resourceFetcher))
 }
 
 func setupServer(handler handlers.Handler) {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Use(middleware.Timeout(5 * time.Second))
+	r.Use(middleware.Timeout(15 * time.Second))
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("welcome to go"))
 	})

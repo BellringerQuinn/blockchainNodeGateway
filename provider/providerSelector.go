@@ -8,13 +8,13 @@ import (
 
 type ProviderSelector interface {
 	ConstructRequest(network model.Network, resource model.Resource) (*http.Request, Provider)
-	DisableProviderForNetwork(provider Provider, network model.Network)
+	DisableProviderForNetworkAndResource(provider Provider, network model.Network, resource model.Resource)
 }
 
 type Provider int
 
 const (
-	UnsupportedRequest Provider = -1
+	UnavailableRequest Provider = -1
 	Infura             Provider = 0
 	QuickNode          Provider = 1
 )

@@ -8,6 +8,7 @@ import (
 
 var (
 	ErrInvalidNetworkParameter = errors.New("Invalid network parameter. Please use one of: " + getAllNetworkParameters())
+	ErrUnavailableResquest     = errors.New("This request is currently unvailable.")
 )
 
 func getAllNetworkParameters() string {

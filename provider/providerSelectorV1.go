@@ -17,9 +17,9 @@ func NewProviderSelectorV1() ProviderSelector {
 }
 
 func (ProviderSelectorV1) ConstructRequest(network model.Network, resource model.Resource) (*http.Request, Provider) {
-	return &http.Request{}, UnsupportedRequest
+	return &http.Request{}, UnavailableRequest
 }
 
-func (ProviderSelectorV1) DisableProviderForNetwork(provider Provider, network model.Network) {
+func (ProviderSelectorV1) DisableProviderForNetworkAndResource(provider Provider, network model.Network, resource model.Resource) {
 
 }
