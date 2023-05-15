@@ -23,3 +23,8 @@ const (
 	EthParam     = "eth"
 	PolygonParam = "polygon"
 )
+
+type Params struct {
+	Network  Network
+	Resource Resource
+}

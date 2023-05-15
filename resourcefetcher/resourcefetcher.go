@@ -7,7 +7,7 @@ import (
 )
 
 type ResourceFetcher interface {
-	FetchResource(resource model.Resource, network model.Network) (string, error)
+	FetchResource(model.Params) (string, error)
 }
 
 type WebClientInterfacer interface {

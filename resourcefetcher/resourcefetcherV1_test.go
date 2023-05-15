@@ -29,8 +29,8 @@ func TestFetchResource(t *testing.T) {
 			name: "success",
 			setupProviderSelector: func() provider.ProviderSelector {
 				selector := &mocks.ProviderSelector{}
-				selector.On("ConstructRequest", mock.Anything, mock.Anything).Return(&http.Request{}, provider.Infura)
-				selector.On("DisableProviderForNetworkAndResource", mock.Anything, mock.Anything, mock.Anything).Return()
+				selector.On("ConstructRequest", mock.Anything).Return(&http.Request{}, provider.Infura)
+				selector.On("DisableProviderForNetworkAndResource", mock.Anything, mock.Anything).Return()
 				return selector
 			},
 			setupClient: func(result string) WebClientInterfacer {
@@ -47,9 +47,9 @@ func TestFetchResource(t *testing.T) {
 			name: "fail once retry and succeed",
 			setupProviderSelector: func() provider.ProviderSelector {
 				selector := &mocks.ProviderSelector{}
-				selector.On("ConstructRequest", mock.Anything, mock.Anything).Return(&http.Request{}, provider.Infura).Once()
-				selector.On("ConstructRequest", mock.Anything, mock.Anything).Return(&http.Request{}, provider.QuickNode)
-				selector.On("DisableProviderForNetworkAndResource", mock.Anything, mock.Anything, mock.Anything).Return()
+				selector.On("ConstructRequest", mock.Anything).Return(&http.Request{}, provider.Infura).Once()
+				selector.On("ConstructRequest", mock.Anything).Return(&http.Request{}, provider.QuickNode)
+				selector.On("DisableProviderForNetworkAndResource", mock.Anything, mock.Anything).Return()
 				return selector
 			},
 			setupClient: func(result string) WebClientInterfacer {
@@ -68,9 +68,9 @@ func TestFetchResource(t *testing.T) {
 			name: "fail once retry and fail out",
 			setupProviderSelector: func() provider.ProviderSelector {
 				selector := &mocks.ProviderSelector{}
-				selector.On("ConstructRequest", mock.Anything, mock.Anything).Return(&http.Request{}, provider.Infura).Once()
-				selector.On("ConstructRequest", mock.Anything, mock.Anything).Return(&http.Request{}, provider.UnavailableRequest).Once()
-				selector.On("DisableProviderForNetworkAndResource", mock.Anything, mock.Anything, mock.Anything).Return()
+				selector.On("ConstructRequest", mock.Anything).Return(&http.Request{}, provider.Infura).Once()
+				selector.On("ConstructRequest", mock.Anything).Return(&http.Request{}, provider.UnavailableRequest).Once()
+				selector.On("DisableProviderForNetworkAndResource", mock.Anything, mock.Anything).Return()
 				return selector
 			},
 			setupClient: func(result string) WebClientInterfacer {
@@ -86,10 +86,10 @@ func TestFetchResource(t *testing.T) {
 			name: "fail with error from provider then retry and fail out",
 			setupProviderSelector: func() provider.ProviderSelector {
 				selector := &mocks.ProviderSelector{}
-				selector.On("ConstructRequest", mock.Anything, mock.Anything).Return(&http.Request{}, provider.Infura).Once()
-				selector.On("ConstructRequest", mock.Anything, mock.Anything).Return(&http.Request{}, provider.QuickNode).Once()
-				selector.On("ConstructRequest", mock.Anything, mock.Anything).Return(&http.Request{}, provider.UnavailableRequest).Once()
-				selector.On("DisableProviderForNetworkAndResource", mock.Anything, mock.Anything, mock.Anything).Return()
+				selector.On("ConstructRequest", mock.Anything).Return(&http.Request{}, provider.Infura).Once()
+				selector.On("ConstructRequest", mock.Anything).Return(&http.Request{}, provider.QuickNode).Once()
+				selector.On("ConstructRequest", mock.Anything).Return(&http.Request{}, provider.UnavailableRequest).Once()
+				selector.On("DisableProviderForNetworkAndResource", mock.Anything, mock.Anything).Return()
 				return selector
 			},
 			setupClient: func(result string) WebClientInterfacer {
@@ -105,8 +105,8 @@ func TestFetchResource(t *testing.T) {
 			name: "fail right away",
 			setupProviderSelector: func() provider.ProviderSelector {
 				selector := &mocks.ProviderSelector{}
-				selector.On("ConstructRequest", mock.Anything, mock.Anything).Return(&http.Request{}, provider.UnavailableRequest)
-				selector.On("DisableProviderForNetworkAndResource", mock.Anything, mock.Anything, mock.Anything).Return()
+				selector.On("ConstructRequest", mock.Anything).Return(&http.Request{}, provider.UnavailableRequest)
+				selector.On("DisableProviderForNetworkAndResource", mock.Anything, mock.Anything).Return()
 				return selector
 			},
 			setupClient: func(result string) WebClientInterfacer {
@@ -125,7 +125,10 @@ func TestFetchResource(t *testing.T) {
 			selector := test.setupProviderSelector()
 			fetcher := NewResourceFetcherV1(selector, test.setupClient(test.expectedResult))
 
-			result, err := fetcher.FetchResource(model.ChainID, model.Eth)
+			result, err := fetcher.FetchResource(model.Params{
+				Network:  model.Eth,
+				Resource: model.ChainID,
+			})
 
 			assert.Equal(t, test.expectedResult, result)
 			assert.Equal(t, test.expectedError, err)

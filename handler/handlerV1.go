@@ -36,21 +36,14 @@ func (h HandlerV1) ValidateNetwork(next http.Handler) http.Handler {
 }
 
 func (h HandlerV1) GetChainID(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-	network, ok := ctx.Value("network").(string)
-	if !ok {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	response, err := h.fetcher.FetchResource(model.ChainID, model.NetworkMap[network])
-	if err != nil {
-		w.WriteHeader(http.StatusBadGateway)
-	}
-	w.Write([]byte(response))
+	h.handleBasicRequest(w, r, model.ChainID)
 }
 
 func (h HandlerV1) GetNetworkVersion(w http.ResponseWriter, r *http.Request) {
+	h.handleBasicRequest(w, r, model.NetworkVersion)
+}
+
+func (h HandlerV1) handleBasicRequest(w http.ResponseWriter, r *http.Request, resource model.Resource) {
 	ctx := r.Context()
 	network, ok := ctx.Value("network").(string)
 	if !ok {
@@ -58,7 +51,11 @@ func (h HandlerV1) GetNetworkVersion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response, err := h.fetcher.FetchResource(model.NetworkVersion, model.NetworkMap[network])
+	params := model.Params{
+		Network:  model.NetworkMap[network],
+		Resource: resource,
+	}
+	response, err := h.fetcher.FetchResource(params)
 	if err != nil {
 		w.WriteHeader(http.StatusBadGateway)
 	}

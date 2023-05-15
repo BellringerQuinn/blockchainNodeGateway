@@ -16,25 +16,25 @@ type ProviderSelector struct {
 	mock.Mock
 }
 
-// ConstructRequest provides a mock function with given fields: network, resource
-func (_m *ProviderSelector) ConstructRequest(network model.Network, resource model.Resource) (*http.Request, provider.Provider) {
-	ret := _m.Called(network, resource)
+// ConstructRequest provides a mock function with given fields: params
+func (_m *ProviderSelector) ConstructRequest(params model.Params) (*http.Request, provider.Provider) {
+	ret := _m.Called(params)
 
 	var r0 *http.Request
 	var r1 provider.Provider
-	if rf, ok := ret.Get(0).(func(model.Network, model.Resource) (*http.Request, provider.Provider)); ok {
-		return rf(network, resource)
+	if rf, ok := ret.Get(0).(func(model.Params) (*http.Request, provider.Provider)); ok {
+		return rf(params)
 	}
-	if rf, ok := ret.Get(0).(func(model.Network, model.Resource) *http.Request); ok {
-		r0 = rf(network, resource)
+	if rf, ok := ret.Get(0).(func(model.Params) *http.Request); ok {
+		r0 = rf(params)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*http.Request)
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(model.Network, model.Resource) provider.Provider); ok {
-		r1 = rf(network, resource)
+	if rf, ok := ret.Get(1).(func(model.Params) provider.Provider); ok {
+		r1 = rf(params)
 	} else {
 		r1 = ret.Get(1).(provider.Provider)
 	}
@@ -42,9 +42,9 @@ func (_m *ProviderSelector) ConstructRequest(network model.Network, resource mod
 	return r0, r1
 }
 
-// DisableProviderForNetworkAndResource provides a mock function with given fields: _a0, network, resource
-func (_m *ProviderSelector) DisableProviderForNetworkAndResource(_a0 provider.Provider, network model.Network, resource model.Resource) {
-	_m.Called(_a0, network, resource)
+// DisableProviderForNetworkAndResource provides a mock function with given fields: _a0, params
+func (_m *ProviderSelector) DisableProviderForNetworkAndResource(_a0 provider.Provider, params model.Params) {
+	_m.Called(_a0, params)
 }
 
 type mockConstructorTestingTNewProviderSelector interface {

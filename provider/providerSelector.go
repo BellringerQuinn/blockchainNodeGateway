@@ -7,8 +7,8 @@ import (
 )
 
 type ProviderSelector interface {
-	ConstructRequest(network model.Network, resource model.Resource) (*http.Request, Provider)
-	DisableProviderForNetworkAndResource(provider Provider, network model.Network, resource model.Resource)
+	ConstructRequest(params model.Params) (*http.Request, Provider)
+	DisableProviderForNetworkAndResource(provider Provider, params model.Params)
 }
 
 type Provider int

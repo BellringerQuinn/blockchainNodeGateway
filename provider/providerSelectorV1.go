@@ -16,10 +16,10 @@ func NewProviderSelectorV1() ProviderSelector {
 	return ProviderSelectorV1{}
 }
 
-func (ProviderSelectorV1) ConstructRequest(network model.Network, resource model.Resource) (*http.Request, Provider) {
+func (ProviderSelectorV1) ConstructRequest(params model.Params) (*http.Request, Provider) {
 	return &http.Request{}, UnavailableRequest
 }
 
-func (ProviderSelectorV1) DisableProviderForNetworkAndResource(provider Provider, network model.Network, resource model.Resource) {
+func (ProviderSelectorV1) DisableProviderForNetworkAndResource(provider Provider, params model.Params) {
 
 }

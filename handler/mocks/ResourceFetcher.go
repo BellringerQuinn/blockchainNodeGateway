@@ -12,23 +12,23 @@ type ResourceFetcher struct {
 	mock.Mock
 }
 
-// FetchResource provides a mock function with given fields: resource, network
-func (_m *ResourceFetcher) FetchResource(resource model.Resource, network model.Network) (string, error) {
-	ret := _m.Called(resource, network)
+// FetchResource provides a mock function with given fields: _a0
+func (_m *ResourceFetcher) FetchResource(_a0 model.Params) (string, error) {
+	ret := _m.Called(_a0)
 
 	var r0 string
 	var r1 error
-	if rf, ok := ret.Get(0).(func(model.Resource, model.Network) (string, error)); ok {
-		return rf(resource, network)
+	if rf, ok := ret.Get(0).(func(model.Params) (string, error)); ok {
+		return rf(_a0)
 	}
-	if rf, ok := ret.Get(0).(func(model.Resource, model.Network) string); ok {
-		r0 = rf(resource, network)
+	if rf, ok := ret.Get(0).(func(model.Params) string); ok {
+		r0 = rf(_a0)
 	} else {
 		r0 = ret.Get(0).(string)
 	}
 
-	if rf, ok := ret.Get(1).(func(model.Resource, model.Network) error); ok {
-		r1 = rf(resource, network)
+	if rf, ok := ret.Get(1).(func(model.Params) error); ok {
+		r1 = rf(_a0)
 	} else {
 		r1 = ret.Error(1)
 	}

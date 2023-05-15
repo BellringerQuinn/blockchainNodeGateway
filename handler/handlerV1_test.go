@@ -74,7 +74,7 @@ func TestGetChainID(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			fetcher := &mocks.ResourceFetcher{}
-			fetcher.On("FetchResource", mock.Anything, mock.Anything).Return(test.expectedResponse, test.mockError)
+			fetcher.On("FetchResource", mock.Anything).Return(test.expectedResponse, test.mockError)
 			handler := NewHandlerV1(fetcher)
 
 			ctx := context.WithValue(context.TODO(), "network", test.network)
@@ -126,7 +126,7 @@ func TestNetworkVersion(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			fetcher := &mocks.ResourceFetcher{}
-			fetcher.On("FetchResource", mock.Anything, mock.Anything).Return(test.expectedResponse, test.mockError)
+			fetcher.On("FetchResource", mock.Anything).Return(test.expectedResponse, test.mockError)
 			handler := NewHandlerV1(fetcher)
 
 			ctx := context.WithValue(context.TODO(), "network", test.network)
