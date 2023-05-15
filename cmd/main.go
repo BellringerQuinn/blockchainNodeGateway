@@ -1,7 +1,9 @@
 package main
 
 import (
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	handlers "github.com/BellringerQuinn/blockchainNodeGateway/handler"
@@ -16,7 +18,8 @@ func main() {
 	client := &http.Client{
 		Timeout: time.Second * 3,
 	}
-	resourceFetcher := resourcefetcher.NewResourceFetcherV1(providerSelector, client)
+	var logger = log.New(os.Stdout, "", 5)
+	resourceFetcher := resourcefetcher.NewResourceFetcherV1(providerSelector, client, logger)
 	setupServer(handlers.NewHandlerV1(resourceFetcher))
 }
 

@@ -18,3 +18,8 @@ const (
 	Infura             Provider = 0
 	QuickNode          Provider = 1
 )
+
+var ProviderMap = map[Provider]string{
+	Infura:    "Infura",
+	QuickNode: "QuickNode",
+}

@@ -3,7 +3,9 @@ package resourcefetcher
 import (
 	"errors"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 	"strings"
 	"testing"
 
@@ -122,8 +124,9 @@ func TestFetchResource(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			var logger = log.New(os.Stdout, "", 5)
 			selector := test.setupProviderSelector()
-			fetcher := NewResourceFetcherV1(selector, test.setupClient(test.expectedResult))
+			fetcher := NewResourceFetcherV1(selector, test.setupClient(test.expectedResult), logger)
 
 			result, err := fetcher.FetchResource(model.Params{
 				Network:  model.Eth,
