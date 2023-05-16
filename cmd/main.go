@@ -15,11 +15,9 @@ import (
 
 func main() {
 	providerSelector := provider.NewProviderSelectorV1()
-	client := &http.Client{
-		Timeout: time.Second * 3,
-	}
 	var logger = log.New(os.Stdout, "", 5)
-	resourceFetcher := resourcefetcher.NewResourceFetcherV1(providerSelector, client, logger)
+
+	resourceFetcher := resourcefetcher.NewResourceFetcherV1(providerSelector, logger)
 	setupServer(handlers.NewHandlerV1(resourceFetcher))
 }
 
