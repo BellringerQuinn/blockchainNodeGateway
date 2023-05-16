@@ -7,7 +7,7 @@ A blockchain node gateway integrating with Infura and Quiknode. If a request to 
 1. Install Docker and start it
 2. Clone this repo
 3. cd into the project's root directory
-4. Build the project `docker compose -f docker-compose.yml up --build
+4. Build the project `docker compose -f docker-compose.yml up --build`
 5. Hit the proxy with the sample requests below
 
 ## Sample Requests
