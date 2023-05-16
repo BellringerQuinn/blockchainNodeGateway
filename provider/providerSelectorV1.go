@@ -11,19 +11,25 @@ import (
 const timeToRetryProvider = 15 * time.Minute
 
 type ProviderSelectorV1 struct {
-	helper SelectorHelper
+	helper  SelectorHelper
+	sleeper Sleeper
 }
 
 func NewProviderSelectorV1() ProviderSelector {
 	return ProviderSelectorV1{
-		helper: selector{},
+		helper:  selector{},
+		sleeper: &RealSleeper{},
 	}
 }
 
-type Response struct {
-	Jsonrpc string `json:"jsonrpc"`
-	ID      int    `json:"id"`
-	Result  string `json:"result"`
+type Sleeper interface {
+	Sleep(time.Duration)
+}
+
+type RealSleeper struct{}
+
+func (s *RealSleeper) Sleep(duration time.Duration) {
+	time.Sleep(duration)
 }
 
 func (selector ProviderSelectorV1) ConstructRequest(params model.Params) (interface{}, model.Provider, error) {
@@ -48,24 +54,24 @@ func (selector ProviderSelectorV1) ConstructRequest(params model.Params) (interf
 	return result, provider, nil
 }
 
-func (ProviderSelectorV1) DisableProviderForParams(provider model.Provider, params model.Params) {
+func (selector ProviderSelectorV1) DisableProviderForParams(provider model.Provider, params model.Params) {
 	supportedRequests[provider][params.Network][params.Resource] = false
-	retryProviderForParams(provider, params)
+	retryProviderForParams(provider, params, selector.sleeper)
 }
 
-func (ProviderSelectorV1) DisableProviderForNetwork(provider model.Provider, network model.Network) {
+func (selector ProviderSelectorV1) DisableProviderForNetwork(provider model.Provider, network model.Network) {
 	for resource := range supportedRequests[provider][network] {
 		supportedRequests[provider][network][resource] = false
 		retryProviderForParams(provider, model.Params{
 			Network:  network,
 			Resource: resource,
-		})
+		}, selector.sleeper)
 	}
 }
 
-func retryProviderForParams(provider model.Provider, params model.Params) {
+func retryProviderForParams(provider model.Provider, params model.Params, sleeper Sleeper) {
 	go func() {
-		time.Sleep(timeToRetryProvider)
+		sleeper.Sleep(timeToRetryProvider)
 		supportedRequests[provider][params.Network][params.Resource] = true
 	}()
 }
